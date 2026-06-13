@@ -333,6 +333,10 @@ input[type="text"]::placeholder { color: var(--gray-300); }
 .rsvp-btn { display: inline-flex; align-items: center; gap: 6px; background: var(--red); color: white; font-size: 12px; font-weight: 600; padding: 7px 16px; border-radius: 6px; text-decoration: none; transition: background 0.15s; font-family: 'Sora', sans-serif; }
 .rsvp-btn:hover { background: var(--red-dark); }
 .rsvp-btn.disabled { background: var(--gray-300); pointer-events: none; }
+.update-btn { display: inline-flex; align-items: center; justify-content: center; background: transparent; color: var(--gray-300); font-size: 13px; padding: 4px 6px; border-radius: 5px; border: 1.5px solid transparent; cursor: pointer; font-family: 'Sora', sans-serif; transition: all 0.15s; line-height: 1; }
+.update-btn:hover { border-color: var(--border); color: var(--gray-500); background: var(--gray-100); }
+.event-card.ys-passport .update-btn { color: rgba(255,255,255,0.25); }
+.event-card.ys-passport .update-btn:hover { border-color: rgba(201,168,76,0.4); color: var(--gold); background: transparent; }
 .event-card.ys-passport .rsvp-btn { background: linear-gradient(135deg,#b08d57,#c9a96e); }
 
 /* ── EMPTY ── */
@@ -360,7 +364,8 @@ input[type="text"]::placeholder { color: var(--gray-300); }
   .stats-bar .submit-btn { display: inline-flex !important; font-size: 10px !important; padding: 4px 10px !important; flex-shrink: 0; }
 }
 @media(max-width:520px){
-  .event-right { display: none; }
+  .event-right { display: flex; }
+  .event-venue-short { display: none; }
   .mobile-fab { display: flex !important; position: fixed; bottom: 20px; right: 16px; z-index: 500; width: 54px; height: 54px; background: var(--red); color: white; border-radius: 50%; align-items: center; justify-content: center; font-size: 26px; box-shadow: 0 4px 20px rgba(255,10,10,0.5); cursor: pointer; border: none; }
 }
 
@@ -612,26 +617,50 @@ const PASSPORT_EVENTS = [
 ];
 
 function normalizeEvent(e) {
-  // Map sheet columns to the format the page expects
+  // Normalize date — strip time component if present
+  let date = e.date || '';
+  if (date.includes('T')) date = date.split('T')[0];
+
+  // Normalize types — sheet stores as comma-separated string
+  let types = ['community'];
+  if (e.types) {
+    types = Array.isArray(e.types)
+      ? e.types.filter(Boolean)
+      : String(e.types).split(',').map(t => t.trim()).filter(Boolean);
+    if (!types.length) types = ['community'];
+  }
+
+  // Always rebuild day label from date — the sheet day field is a full JS date string
+  // e.g. "Fri Jun 12 2026 19:00:00 GMT-0400 (Eastern Daylight Time)" which is unusable
+  const dayMap = {
+    '2026-06-13':'Sat Jun 13','2026-06-14':'Sun Jun 14','2026-06-15':'Mon Jun 15',
+    '2026-06-16':'Tue Jun 16','2026-06-17':'Wed Jun 17','2026-06-18':'Thu Jun 18',
+    '2026-06-19':'Fri Jun 19','2026-06-20':'Sat Jun 20'
+  };
+  const day = dayMap[date] || date;
+
+  // Normalize ticket to string
+  const ticketRaw = e.ticket != null ? String(e.ticket) : 'Free';
+
   return {
-    id: e.id || Math.random(),
-    name: e.name || '',
+    id: e.id || ('ev_' + Math.random().toString(36).slice(2)),
+    name: (e.name || '').replace(/\s*[·|]\s*(Luma|Eventbrite|Partiful|Meetup)\s*$/i, '').trim(),
     host: e.host || '',
-    date: e.date || '',
-    day: e.day || '',
+    date,
+    day,
     time: e.time || '',
     neighborhood: e.neighborhood || e.city || 'Paris',
     venue: e.venue || '',
     address: e.address || '',
-    types: e.types ? (Array.isArray(e.types) ? e.types : e.types.split(',').map(t=>t.trim())) : ['community'],
-    ticket: e.ticket || 'Free',
+    types,
+    ticket: ticketRaw,
     drinks: e.drinks === true || e.drinks === 'TRUE' || e.drinks === 'true',
     food: e.food === true || e.food === 'TRUE' || e.food === 'true',
     notes: e.notes || '',
     rsvp: e.rsvp || '',
-    status: e.ticket && e.ticket.toLowerCase().includes('invite') ? 'invite' :
-            e.ticket && e.ticket.toLowerCase().includes('full') ? 'full' :
-            e.ticket && e.ticket.toLowerCase().includes('waitlist') ? 'waitlist' : 'open',
+    status: ticketRaw.toLowerCase().includes('invite') ? 'invite' :
+            ticketRaw.toLowerCase().includes('full') ? 'full' :
+            ticketRaw.toLowerCase().includes('waitlist') ? 'waitlist' : 'open',
     yorkseed: e.yorkseed || null
   };
 }
@@ -644,16 +673,25 @@ async function loadEvents() {
   try {
     const res = await fetch(SCRIPT_URL + '?conference=' + CONFERENCE, {cache:'no-store'});
     const data = await res.json();
-    if (data.ok && data.events && data.events.length > 0) {
-      // Merge: passport events first, then sheet events (excluding any passport duplicates)
-      const sheetEvents = data.events.map(normalizeEvent).filter(e => !e.yorkseed);
+    if (data.ok && Array.isArray(data.events)) {
+        const VALID_DATES = new Set(['2026-06-13','2026-06-14','2026-06-15','2026-06-16','2026-06-17','2026-06-18','2026-06-19','2026-06-20']);
+      const passportRsvps = new Set(PASSPORT_EVENTS.map(e => e.rsvp));
+      const seenRsvps = new Set(passportRsvps);
+      const sheetEvents = data.events
+        .map(normalizeEvent)
+        .filter(e => {
+          if (!e.name || !e.date) return false;
+          if (!VALID_DATES.has(e.date)) return false; // only Jun 13-20
+          const rsvpKey = (e.rsvp || e.name).replace(/[?#].*/,'').toLowerCase();
+          if (seenRsvps.has(rsvpKey)) return false; // deduplicate
+          seenRsvps.add(rsvpKey);
+          return true;
+        });
       EVENTS = [...PASSPORT_EVENTS, ...sheetEvents];
     } else {
-      // Fallback: passport events only if sheet returns nothing
-      EVENTS = [...PASSPORT_EVENTS];
+        EVENTS = [...PASSPORT_EVENTS];
     }
   } catch(err) {
-    console.warn('Failed to load from sheet, using passport events only:', err);
     EVENTS = [...PASSPORT_EVENTS];
   }
 
@@ -756,6 +794,7 @@ function render(){
           </div>
           <div class="event-right">
             <div class="event-venue-short">${e.neighborhood}</div>
+            <button class="update-btn js-update-btn" data-rsvp="${(e.rsvp||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;')}" data-name="${(e.name||'').replace(/"/g,'&quot;')}" title="Report a change">✏️</button>
             <div class="chevron">▾</div>
           </div>
         </div>
@@ -770,6 +809,13 @@ function render(){
           <div class="rsvp-row">${rsvpBtn}</div>
         </div>`;
       card.querySelector('.event-main').addEventListener('click',()=>card.classList.toggle('expanded'));
+      const updBtn = card.querySelector('.js-update-btn');
+      if (updBtn) {
+        updBtn.addEventListener('click', function(ev) {
+          ev.stopPropagation();
+          openUpdateModal(this.dataset.rsvp, this.dataset.name);
+        });
+      }
       group.appendChild(card);
     });
     content.insertBefore(group,empty);
@@ -1068,6 +1114,21 @@ function openModal(tab) {
   document.getElementById('successState').classList.remove('show');
   document.body.style.overflow = 'hidden';
 }
+function openUpdateModal(rsvp, name) {
+  openModal('update');
+  if (rsvp) {
+    const inp = document.getElementById('upd-rsvp');
+    if (inp) {
+      inp.value = rsvp;
+      findEventByRsvp();
+    }
+  }
+  // If no rsvp, at least show the event name in the found label as a hint
+  if (!rsvp && name) {
+    const label = document.getElementById('upd-found-label');
+    if (label) label.textContent = 'Updating: ' + name;
+  }
+}
 function closeModal() {
   document.getElementById('modalOverlay').classList.remove('open');
   document.body.style.overflow = '';
@@ -1189,25 +1250,22 @@ async function submitEvent() {
   buildDayTabs();
   // Post to sheets and wait for confirmation before showing success
   const payload = {
+    id: newEvent.id,
     name: newEvent.name,
     host: newEvent.host,
     date: newEvent.date,
     day: newEvent.day,
     time: newEvent.time,
-    neighborhood: newEvent.neighborhood,
+    venue: newEvent.venue || 'TBD',
     city: newEvent.neighborhood || 'Paris',
-    venue: newEvent.venue,
     address: newEvent.address || 'Paris, France',
-    types: (newEvent.types || []).join(', '),
-    ticket: newEvent.ticket,
-    free: newEvent.ticket === 'Free' ? 'true' : 'false',
-    drinks: newEvent.drinks ? 'true' : 'false',
-    food: newEvent.food ? 'true' : 'false',
+    notes: newEvent.notes || '',
     rsvp: newEvent.rsvp,
-    notes: newEvent.notes,
-    status: 'open',
-    conference: CONFERENCE,
-    submitted: 'true'
+    ticket: newEvent.ticket || 'Free',
+    drinks: newEvent.drinks ? 'TRUE' : 'FALSE',
+    food: newEvent.food ? 'TRUE' : 'FALSE',
+    neighborhood: newEvent.neighborhood || 'Paris',
+    conference: CONFERENCE
   };
 
   // Show saving state on the button
@@ -1237,7 +1295,7 @@ async function submitEvent() {
     if (allTab) allTab.classList.add('active');
     buildDayTabs();
     render();
-  }, 2500);
+  }, 4500);
 
   showSuccess('added');
   render();
