@@ -363,6 +363,69 @@ input[type="text"]::placeholder { color: var(--gray-300); }
   .event-right { display: none; }
   .mobile-fab { display: flex !important; position: fixed; bottom: 20px; right: 16px; z-index: 500; width: 54px; height: 54px; background: var(--red); color: white; border-radius: 50%; align-items: center; justify-content: center; font-size: 26px; box-shadow: 0 4px 20px rgba(255,10,10,0.5); cursor: pointer; border: none; }
 }
+
+/* ── MODAL ── */
+.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.75); z-index: 999; align-items: center; justify-content: center; padding: 20px; }
+.modal-overlay.open { display: flex; }
+.modal { background: white; border-radius: 14px; width: 100%; max-width: 560px; max-height: 90vh; overflow-y: auto; box-shadow: 0 24px 60px rgba(0,0,0,0.35); font-family: 'Sora', sans-serif; }
+.modal-header { display: flex; align-items: center; justify-content: space-between; padding: 18px 22px 14px; border-bottom: 1px solid var(--border); position: sticky; top: 0; background: white; z-index: 2; }
+.modal-header h2 { font-size: 16px; font-weight: 700; color: var(--black); margin: 0; }
+.modal-close { width: 30px; height: 30px; border-radius: 50%; border: none; background: var(--gray-100); cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center; color: var(--gray-500); }
+.modal-close:hover { background: var(--red); color: white; }
+.modal-body { padding: 18px 22px 22px; }
+.modal-tabs { display: flex; gap: 0; border-bottom: 1px solid var(--border); margin-bottom: 18px; }
+.modal-tab { flex: 1; padding: 9px 12px; font-size: 12px; font-weight: 500; color: var(--gray-500); border-bottom: 2px solid transparent; cursor: pointer; text-align: center; transition: all 0.15s; user-select: none; }
+.modal-tab.active { color: var(--red); border-bottom-color: var(--red); font-weight: 600; }
+.form-group { margin-bottom: 14px; }
+.form-group label { display: block; font-size: 11.5px; font-weight: 600; color: var(--gray-700); margin-bottom: 5px; letter-spacing: 0.02em; }
+.form-group label span { color: var(--red); }
+.form-group input, .form-group select, .form-group textarea { width: 100%; padding: 9px 12px; border: 1.5px solid var(--border); border-radius: 7px; font-family: 'Sora', sans-serif; font-size: 13px; color: var(--black); outline: none; transition: border-color 0.15s; background: var(--gray-100); }
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--red); background: white; }
+.form-group textarea { resize: vertical; min-height: 80px; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.form-submit { width: 100%; padding: 11px; background: var(--red); color: white; border: none; border-radius: 8px; font-family: 'Sora', sans-serif; font-size: 13px; font-weight: 600; cursor: pointer; transition: background 0.15s; margin-top: 6px; }
+.form-submit:hover { background: var(--red-dark); }
+.form-submit:disabled { background: var(--gray-300); cursor: not-allowed; }
+.modal-notice { background: var(--red-light); border: 1px solid var(--red-mid); border-radius: 7px; padding: 10px 13px; font-size: 12px; color: var(--gray-700); line-height: 1.5; margin-bottom: 16px; }
+.modal-notice strong { color: var(--red-dark); }
+.success-state { display: none; text-align: center; padding: 30px 20px; }
+.success-state.show { display: block; }
+.success-icon { font-size: 40px; margin-bottom: 12px; }
+.success-state h3 { font-size: 18px; font-weight: 700; margin-bottom: 8px; color: var(--black); }
+.success-state p { font-size: 13px; color: var(--gray-500); line-height: 1.6; }
+.cat-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+.cat-chip { padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 500; cursor: pointer; border: 1.5px solid var(--border); background: white; color: var(--gray-500); transition: all 0.15s; }
+.cat-chip:hover, .cat-chip.active { border-color: var(--red); color: var(--red); background: var(--red-light); }
+.duplicate-warning { display: none; background: #fff8e8; border: 1px solid #ffd080; border-radius: 7px; padding: 8px 12px; font-size: 12px; color: #8a6000; margin-bottom: 12px; }
+.duplicate-warning.show { display: block; }
+.tier-card { border: 1.5px solid var(--border); border-radius: 10px; padding: 16px; margin-bottom: 12px; }
+.tier-card.tier-headline { background: var(--black); border-color: var(--gold); }
+.tier-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 10px; }
+.tier-name { font-size: 15px; font-weight: 700; }
+.tier-price { font-size: 20px; font-weight: 700; }
+.tier-price-sub { font-size: 11px; color: var(--gray-300); }
+.tier-features { font-size: 12px; line-height: 1.8; margin-bottom: 12px; }
+.tier-btn { display: block; width: 100%; padding: 10px; border-radius: 7px; font-family: 'Sora', sans-serif; font-size: 13px; font-weight: 600; text-align: center; text-decoration: none; transition: opacity 0.15s; }
+.tier-btn:hover { opacity: 0.85; }
+.tier-btn-basic { background: #e8f0ff; color: #3355cc; }
+.tier-btn-partner { background: var(--red); color: white; }
+.tier-btn-headline { background: linear-gradient(135deg,#b08d57,#c9a96e); color: var(--black); }
+.tier-divider { text-align: center; margin: 4px 0 12px; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gray-300); position: relative; }
+.tier-divider::before { content:''; position:absolute; top:50%; left:0; right:0; height:1px; background:var(--border); }
+.tier-divider span { background: white; padding: 0 10px; position: relative; }
+.ys-partner-badge { display: inline-flex; align-items: center; gap: 4px; background: var(--red-light); color: var(--red); font-family: 'JetBrains Mono', monospace; font-size: 9px; font-weight: 700; padding: 2px 8px; border-radius: 4px; letter-spacing: 0.07em; text-transform: uppercase; white-space: nowrap; margin-bottom: 4px; }
+.public-update-notice { background: #f0fff4; border: 1px solid #b0e8c0; border-radius: 7px; padding: 8px 12px; font-size: 12px; color: #1a7a40; margin-bottom: 12px; }
+.verify-badge { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-family: 'JetBrains Mono', monospace; padding: 2px 8px; border-radius: 4px; margin-top: 4px; }
+.verify-badge.checking { background: #f5f5f5; color: #888; }
+.verify-badge.valid { background: #f0fff4; color: #1a7a40; }
+.verify-badge.invalid { background: #fff0f0; color: #cc2222; }
+@media(max-width:520px) {
+  .modal { border-radius: 10px; }
+  .modal-header { padding: 14px 16px 12px; }
+  .modal-body { padding: 14px 16px 18px; }
+  .form-row { grid-template-columns: 1fr; }
+  .modal-tab { font-size: 11px; padding: 8px 6px; }
+}
 </style>
 </head>
 <body>
@@ -385,7 +448,7 @@ input[type="text"]::placeholder { color: var(--gray-300); }
   </div>
 </header>
 
-<button class="mobile-fab" onclick="document.getElementById('searchInput').focus()">⌕</button>
+<button class="mobile-fab" onclick="openModal('submit')" aria-label="Submit an event">+</button>
 
 <!-- HERO -->
 <div class="hero">
@@ -437,7 +500,7 @@ input[type="text"]::placeholder { color: var(--gray-300); }
         <div style="font-family:'Sora',sans-serif;font-size:11px;color:#999;margin-top:2px;">Newsletter blast · WhatsApp · Yorkseed co-host branding · Hero placement</div>
       </div>
     </div>
-    <a href="mailto:partnership@yorkseed.co" class="feature-btn" style="flex-shrink:0;padding:8px 18px;font-size:12px;">⭐ Feature my event →</a>
+    <button class="feature-btn" onclick="openModal('feature')" style="flex-shrink:0;padding:8px 18px;font-size:12px;">⭐ Feature my event →</button>
   </div>
 </div>
 
@@ -483,7 +546,7 @@ input[type="text"]::placeholder { color: var(--gray-300); }
     <a href="https://chat.whatsapp.com/CLeAyOkqtptBOtLzK9VVlM" target="_blank" rel="noopener" class="info-item"><div class="info-dot" style="background:#25D366;"></div><div><div class="info-title">Yorkseed Paris Hub</div><div class="info-sub">Paris-based founders & investors — local hub open for VivaTech week</div></div></a>
     <a href="https://yorkseed.co/connect" target="_blank" rel="noopener" class="info-item"><div class="info-dot" style="background:var(--gold);"></div><div><div class="info-title">Yorkseed Connect</div><div class="info-sub">Private venture platform — Deal Room, roundtables, investor network</div></div></a>
     <a href="https://pulse.yorkseed.co" target="_blank" rel="noopener" class="info-item"><div class="info-dot" style="background:var(--red);"></div><div><div class="info-title">Yorkseed Insider Newsletter</div><div class="info-sub">Curated global venture events — weekly digest for founders & investors</div></div></a>
-    <a href="mailto:partnership@yorkseed.co" class="info-item"><div class="info-dot" style="background:var(--red);"></div><div><div class="info-title">Submit Your Event</div><div class="info-sub">Email partnership@yorkseed.co to add your event to this list</div></div></a>
+    <a href="javascript:void(0)" onclick="openModal('submit')" class="info-item"><div class="info-dot" style="background:var(--red);"></div><div><div class="info-title">Submit Your Event</div><div class="info-sub">Click to submit your event to this list</div></div></a>
     <a href="https://app.yorkseed.co/eventoffer" target="_blank" rel="noopener" class="info-item"><div class="info-dot" style="background:var(--red);"></div><div><div class="info-title">Founders &amp; Investors</div><div class="info-sub">Raising or deploying capital? Connect on Yorkseed Connect platform</div></div></a>
     <a href="mailto:partnership@yorkseed.co" class="info-item" style="border-color:rgba(255,10,10,0.3);background:#fff8f8;"><div class="info-dot" style="background:var(--red);"></div><div><div class="info-title" style="display:flex;align-items:center;gap:6px;">Strategic Partner <span style="font-size:9px;font-weight:700;color:var(--red);background:#ffe0e0;padding:2px 6px;border-radius:4px;letter-spacing:0.05em;text-transform:uppercase;">Limited</span></div><div class="info-sub">Partner with Yorkseed across Milan AI Week, NY Tech Week &amp; VivaTech Paris 2026</div></div></a>
   </div>
@@ -493,7 +556,7 @@ input[type="text"]::placeholder { color: var(--gray-300); }
 <div class="sticky-controls-wrap">
   <div class="controls">
     <div class="search-row">
-      <a href="mailto:partnership@yorkseed.co" class="submit-btn">+ Submit Event</a>
+      <button class="submit-btn" onclick="openModal('submit')">+ Submit Event</button>
       <div class="search-wrap">
         <span class="search-icon">⌕</span>
         <input type="text" id="searchInput" placeholder="Search events, hosts, venues…" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
@@ -518,8 +581,8 @@ input[type="text"]::placeholder { color: var(--gray-300); }
   <div class="stats-bar">
     <div class="stat">Showing <strong id="visibleCount">0</strong> events</div>
     <span class="stat-sep">·</span>
-    <a href="mailto:partnership@yorkseed.co" class="submit-btn" style="background:var(--red);border-color:var(--red);font-size:11px;padding:4px 10px;flex-shrink:0;">+ Submit Event</a>
-    <a href="mailto:partnership@yorkseed.co" style="display:inline-flex;align-items:center;gap:5px;background:var(--gold);color:#0a0a0a;font-family:'Sora',sans-serif;font-size:11px;font-weight:700;padding:4px 10px;border-radius:6px;text-decoration:none;flex-shrink:0;white-space:nowrap;">⭐ Feature My Event</a>
+    <button class="submit-btn" onclick="openModal('submit')" style="background:var(--red);border-color:var(--red);font-size:11px;padding:4px 10px;flex-shrink:0;">+ Submit Event</button>
+    <button onclick="openModal('feature')" style="display:inline-flex;align-items:center;gap:5px;background:var(--gold);color:#0a0a0a;font-family:'Sora',sans-serif;font-size:11px;font-weight:700;padding:4px 10px;border-radius:6px;border:none;cursor:pointer;flex-shrink:0;white-space:nowrap;">⭐ Feature My Event</button>
   </div>
 </div>
 
@@ -722,14 +785,14 @@ function buildDayTabs(){
   // Build day tabs dynamically from actual event dates
   const dateMap = {
     'all': 'All Days',
-    '2026-06-12': 'Sat Jun 13',
-    '2026-06-13': 'Sun Jun 14',
-    '2026-06-14': 'Mon Jun 15',
-    '2026-06-15': 'Tue Jun 16',
-    '2026-06-16': 'Wed Jun 17',
-    '2026-06-17': 'Thu Jun 18',
-    '2026-06-18': 'Fri Jun 19',
-    '2026-06-19': 'Sat Jun 20',
+    '2026-06-13': 'Sat Jun 13',
+    '2026-06-14': 'Sun Jun 14',
+    '2026-06-15': 'Mon Jun 15',
+    '2026-06-16': 'Tue Jun 16',
+    '2026-06-17': 'Wed Jun 17',
+    '2026-06-18': 'Thu Jun 18',
+    '2026-06-19': 'Fri Jun 19',
+    '2026-06-20': 'Sat Jun 20',
   };
   const seenDates = ['all', ...new Set(allEvents().map(e=>e.date).filter(Boolean).sort())];
   const days = seenDates.map(d => ({date: d, label: dateMap[d] || d}));
@@ -778,6 +841,519 @@ searchEl.addEventListener('input',render);
 
 // Load events from sheet on page load
 loadEvents();
+</script>
+
+<!-- SUBMIT EVENT MODAL -->
+<div class="modal-overlay" id="modalOverlay" onclick="if(event.target===this)closeModal()">
+  <div class="modal">
+    <div class="modal-header">
+      <h2 id="modalTitle">Submit an Event</h2>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-tabs">
+        <div class="modal-tab active" onclick="switchTab('quick')" id="tab-quick">✨ Quick Add</div>
+        <div class="modal-tab" onclick="switchTab('submit')" id="tab-submit">📝 Details</div>
+        <div class="modal-tab" onclick="switchTab('update')" id="tab-update">✏️ Update</div>
+        <div class="modal-tab" onclick="switchTab('feature')" id="tab-feature" style="color:var(--gold);font-weight:600;">⭐ Feature</div>
+      </div>
+      <div class="success-state" id="successState">
+        <div class="success-icon" id="successIcon">✅</div>
+        <h3 id="successTitle">Done!</h3>
+        <p id="successMsg"></p>
+        <button class="form-submit" style="margin-top:16px;" onclick="closeModal()">Close</button>
+      </div>
+
+      <!-- SUBMIT TAB -->
+
+      <!-- QUICK ADD TAB -->
+      <div id="form-quick">
+        <div style="text-align:center;padding:8px 0 16px;">
+          <div style="font-size:30px;margin-bottom:8px;">✨</div>
+          <div style="font-size:14px;font-weight:700;color:var(--black);margin-bottom:5px;">Paste your event link</div>
+          <div style="font-size:12px;color:var(--gray-500);line-height:1.65;">Works with Luma, Eventbrite, Partiful &amp; more.<br>Fetches &amp; fills in all the details automatically.</div>
+        </div>
+        <div class="form-group">
+          <input type="url" id="magic-url" placeholder="https://lu.ma/your-event" style="font-size:14px;padding:12px 14px;text-align:center;" autocomplete="off" autocorrect="off" spellcheck="false">
+        </div>
+
+        <button class="form-submit" id="magicBtn" onclick="importFromLink()" style="margin-top:4px;">✨ Import &amp; Fill Form</button>
+        <div id="magicStatus" style="display:none;text-align:center;padding:16px 0 6px;">
+          <div style="font-size:26px;margin-bottom:6px;" id="magicStatusIcon">⏳</div>
+          <div id="magicStatusText" style="font-size:12.5px;color:var(--gray-500);">Fetching event details…</div>
+        </div>
+      </div>
+
+      <div id="form-submit" style="display:none;">
+        <div class="modal-notice"><strong>Auto-approved</strong> for June 13–20, 2026. Duplicates detected and merged automatically.</div>
+        <div class="duplicate-warning" id="duplicateWarning">⚠️ <strong>Possible duplicate:</strong> <span id="duplicateEventName"></span>. Your details will be merged in.</div>
+        <div class="form-group"><label>Event Name <span>*</span></label><input type="text" id="sub-name" placeholder="e.g. AI Happy Hour at Le Marais" oninput="checkDuplicate()"></div>
+        <div class="form-row">
+          <div class="form-group"><label>Date <span>*</span></label>
+            <select id="sub-date">
+              <option value="">Select date</option>
+              <option value="2026-06-13">Sat Jun 13</option>
+              <option value="2026-06-14">Sun Jun 14</option>
+              <option value="2026-06-15">Mon Jun 15</option>
+              <option value="2026-06-16">Tue Jun 16</option>
+              <option value="2026-06-17">Wed Jun 17</option>
+              <option value="2026-06-18">Thu Jun 18</option>
+              <option value="2026-06-19">Fri Jun 19</option>
+              <option value="2026-06-20">Sat Jun 20</option>
+            </select>
+          </div>
+          <div class="form-group"><label>Start Time</label><input type="text" id="sub-time" placeholder="e.g. 6:00 PM"></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>Host / Organizer</label><input type="text" id="sub-host" placeholder="e.g. a16z, Yorkseed"></div>
+          <div class="form-group"><label>Neighborhood</label><input type="text" id="sub-neighborhood" placeholder="e.g. Le Marais, Saint-Germain"></div>
+        </div>
+        <div class="form-group"><label>Venue / Address</label><input type="text" id="sub-venue" placeholder="e.g. Bar Le Vanart, 11 Rue des Tournelles"></div>
+        <div class="form-group"><label>RSVP / Registration Link <span>*</span></label><input type="url" id="sub-rsvp" placeholder="https://lu.ma/..." oninput="checkDuplicate()"><span id="rsvpBadge" class="verify-badge" style="display:none;"></span></div>
+        <div class="form-group"><label>Ticket Type</label>
+          <select id="sub-ticket">
+            <option value="Free">Free</option>
+            <option value="Paid">Paid</option>
+            <option value="Invite Only">Invite Only</option>
+            <option value="Free (Approval Required)">Free (Approval Required)</option>
+            <option value="Application Required">Application Required</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Category</label>
+          <div class="cat-chips">
+            <button type="button" class="cat-chip" data-val="ai">🤖 AI &amp; Tech</button>
+            <button type="button" class="cat-chip" data-val="vc">💼 VC &amp; Investors</button>
+            <button type="button" class="cat-chip" data-val="web3">🔗 Web3</button>
+            <button type="button" class="cat-chip" data-val="deeptech">🔬 Deep Tech</button>
+            <button type="button" class="cat-chip" data-val="run">🏃 Run</button>
+            <button type="button" class="cat-chip" data-val="dinner">🍽 Dinner</button>
+            <button type="button" class="cat-chip" data-val="hackathon">⚡ Hackathon</button>
+            <button type="button" class="cat-chip" data-val="health">🏥 Health</button>
+            <button type="button" class="cat-chip" data-val="sustainability">🌱 Green</button>
+            <button type="button" class="cat-chip" data-val="community">🤝 Community</button>
+            <button type="button" class="cat-chip" data-val="europe">🇪🇺 Europe</button>
+          </div>
+          <input type="hidden" id="sub-type" value="community">
+        </div>
+        <div class="form-group"><label>Description / Notes</label><textarea id="sub-notes" placeholder="Brief description of the event…"></textarea></div>
+        <div class="form-row">
+          <div class="form-group"><label><input type="checkbox" id="sub-drinks" style="width:auto;margin-right:5px;">Drinks included</label></div>
+          <div class="form-group"><label><input type="checkbox" id="sub-food" style="width:auto;margin-right:5px;">Food included</label></div>
+        </div>
+        <button class="form-submit" onclick="submitEvent()">Add Event to List</button>
+      </div>
+
+      <!-- UPDATE TAB -->
+      <div id="form-update" style="display:none;">
+        <div class="public-update-notice">💡 <strong>Anyone can update event info</strong> — changes go live immediately.</div>
+        <div class="modal-notice">Paste the RSVP link of the event you want to update.</div>
+        <div class="form-group">
+          <label>Event RSVP Link <span>*</span></label>
+          <input type="url" id="upd-rsvp" placeholder="https://lu.ma/..." oninput="findEventByRsvp()">
+          <div class="form-hint" id="upd-found-label" style="font-size:11px;color:var(--gray-500);margin-top:4px;"></div>
+        </div>
+        <div id="upd-fields" style="display:none;">
+          <div class="modal-notice" style="background:#e8fff0;border-color:#b0dfc0;">
+            <strong style="color:#1a7a40;">Event found:</strong> <span id="upd-event-name"></span>. Fill in only the fields that changed.
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label>New Date (if changed)</label>
+              <select id="upd-date">
+                <option value="">No change</option>
+                <option value="2026-06-13">Sat Jun 13</option>
+                <option value="2026-06-14">Sun Jun 14</option>
+                <option value="2026-06-15">Mon Jun 15</option>
+                <option value="2026-06-16">Tue Jun 16</option>
+                <option value="2026-06-17">Wed Jun 17</option>
+                <option value="2026-06-18">Thu Jun 18</option>
+                <option value="2026-06-19">Fri Jun 19</option>
+                <option value="2026-06-20">Sat Jun 20</option>
+              </select>
+            </div>
+            <div class="form-group"><label>New Start Time</label>
+              <input type="text" id="upd-time" placeholder="e.g. 7:00 PM">
+            </div>
+          </div>
+          <div class="form-group"><label>New Venue / Address</label>
+            <input type="text" id="upd-venue" placeholder="New location…">
+          </div>
+          <div class="form-group"><label>New / Additional Host</label>
+            <input type="text" id="upd-host" placeholder="e.g. Stripe">
+          </div>
+          <div class="form-group">
+            <label>Update Notes <span style="font-weight:400;color:var(--gray-300);">(e.g. "now sold out", "venue changed")</span></label>
+            <textarea id="upd-notes" placeholder="What changed?" style="min-height:60px;"></textarea>
+          </div>
+          <button class="form-submit" id="updateBtn" onclick="submitUpdate()">Apply Update</button>
+        </div>
+      </div>
+
+      <!-- FEATURE TAB -->
+      <div id="form-feature" style="display:none;">
+        <div style="text-align:center;padding:6px 0 18px;">
+          <div style="font-size:11px;color:var(--gray-500);line-height:1.65;">Get your event seen by thousands of founders and investors.<br>After payment, email <strong style="color:var(--black);">partnership@yorkseed.co</strong> with your RSVP link.</div>
+        </div>
+        <div class="tier-card">
+          <div class="tier-header">
+            <div>
+              <span class="ys-featured-badge" style="margin-bottom:6px;display:inline-flex;">★ Basic Featured</span>
+              <div class="tier-name" style="color:#0a0a0a;">Basic</div>
+            </div>
+            <div style="text-align:right;">
+              <div class="tier-price" style="color:#3355cc;">$150</div>
+              <div class="tier-price-sub">one-time · 1 event</div>
+            </div>
+          </div>
+          <div class="tier-features" style="color:var(--gray-500);">
+            ✓ Featured badge on your card<br>
+            ✓ Top-of-day sort placement<br>
+            ✗ No hero carousel<br>
+            ✗ No WhatsApp blast or newsletter
+          </div>
+          <a href="mailto:partnership@yorkseed.co?subject=Basic Featured Listing — VivaTech 2026" class="tier-btn tier-btn-basic">Get Basic — $150 ↗</a>
+        </div>
+        <div class="tier-divider"><span>most popular</span></div>
+        <div class="tier-card">
+          <div class="tier-header">
+            <div>
+              <span class="ys-partner-badge" style="margin-bottom:6px;display:inline-flex;">♥ Yorkseed Partner</span>
+              <div class="tier-name" style="color:#0a0a0a;">Partner</div>
+            </div>
+            <div style="text-align:right;">
+              <div class="tier-price" style="color:var(--red);">$400</div>
+              <div class="tier-price-sub">one-time · 1 event</div>
+            </div>
+          </div>
+          <div class="tier-features" style="color:var(--gray-500);">
+            ✓ Yorkseed Partner badge &amp; warm card<br>
+            ✓ Hero carousel placement<br>
+            ✓ WhatsApp blast<br>
+            ✓ Newsletter mention
+          </div>
+          <a href="mailto:partnership@yorkseed.co?subject=Partner Listing — VivaTech 2026" class="tier-btn tier-btn-partner">Get Partner — $400 ↗</a>
+        </div>
+        <div class="tier-divider"><span>full endorsement</span></div>
+        <div class="tier-card tier-headline">
+          <div class="tier-header">
+            <div>
+              <span class="ys-passport-badge" style="margin-bottom:6px;display:inline-flex;">⭐ Passport Series</span>
+              <div class="tier-name" style="color:white;">Headline / Passport</div>
+            </div>
+            <div style="text-align:right;">
+              <div class="tier-price" style="color:var(--gold);">$1,000</div>
+              <div class="tier-price-sub" style="color:rgba(255,255,255,0.4);">one-time · 1 event</div>
+            </div>
+          </div>
+          <div class="tier-features" style="color:rgba(255,255,255,0.6);">
+            ✓ Black gold Passport Series card<br>
+            ✓ Top placement every day it appears<br>
+            ✓ Gold hero carousel<br>
+            ✓ WhatsApp blast + newsletter feature<br>
+            ✓ Yorkseed co-host branding
+          </div>
+          <a href="mailto:partnership@yorkseed.co?subject=Passport Series Listing — VivaTech 2026" class="tier-btn tier-btn-headline">Get Headline — $1,000 ↗</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+// ── MODAL FUNCTIONS ──
+function openModal(tab) {
+  document.getElementById('modalOverlay').classList.add('open');
+  switchTab(tab || 'quick');
+  document.getElementById('successState').classList.remove('show');
+  document.body.style.overflow = 'hidden';
+}
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+  resetModalForms();
+}
+function switchTab(tab) {
+  ['quick','submit','update','feature'].forEach(t => {
+    document.getElementById('tab-'+t).classList.toggle('active', t === tab);
+    document.getElementById('form-'+t).style.display = t === tab ? 'block' : 'none';
+  });
+  document.getElementById('successState').classList.remove('show');
+  const titles = { quick:'✨ Quick Add via Link', submit:'📝 Submit Details', update:'Update an Event', feature:'⭐ Feature Your Event' };
+  document.getElementById('modalTitle').textContent = titles[tab];
+}
+function resetModalForms() {
+  ['sub-name','sub-time','sub-host','sub-neighborhood','sub-venue','sub-rsvp','sub-notes',
+   'upd-rsvp','upd-time','upd-venue','upd-host','upd-notes'].forEach(id => {
+    const el = document.getElementById(id); if(el) el.value = '';
+  });
+  const subDate = document.getElementById('sub-date'); if(subDate) subDate.selectedIndex = 0;
+  const drinks = document.getElementById('sub-drinks'); if(drinks) drinks.checked = false;
+  const food = document.getElementById('sub-food'); if(food) food.checked = false;
+  const dw = document.getElementById('duplicateWarning'); if(dw) dw.classList.remove('show');
+  const rb = document.getElementById('rsvpBadge'); if(rb) rb.style.display = 'none';
+  const uf = document.getElementById('upd-fields'); if(uf) uf.style.display = 'none';
+  const ul = document.getElementById('upd-found-label'); if(ul) ul.textContent = '';
+  document.querySelectorAll('.cat-chip').forEach(c => c.classList.remove('active'));
+  document.getElementById('sub-type').value = 'community';
+}
+function showSuccess(type) {
+  document.getElementById('successState').classList.add('show');
+  ['form-quick','form-submit','form-update','form-feature'].forEach(id => {
+    const el = document.getElementById(id); if(el) el.style.display = 'none';
+  });
+  if(type === 'added') {
+    document.getElementById('successIcon').textContent = '✅';
+    document.getElementById('successTitle').textContent = 'Event Added!';
+    document.getElementById('successMsg').textContent = 'Your event has been added to the list and will appear immediately.';
+  } else if(type === 'duplicate') {
+    document.getElementById('successIcon').textContent = '🔄';
+    document.getElementById('successTitle').textContent = 'Merged!';
+    document.getElementById('successMsg').textContent = 'This event already exists — your notes have been added to it.';
+  } else if(type === 'updated') {
+    document.getElementById('successIcon').textContent = '✏️';
+    document.getElementById('successTitle').textContent = 'Updated!';
+    document.getElementById('successMsg').textContent = 'The event has been updated successfully.';
+  }
+}
+function normalize(str) { return (str||'').toLowerCase().replace(/[^a-z0-9\s]/g,'').replace(/\s+/g,' ').trim(); }
+function similarity(a, b) {
+  a = normalize(a); b = normalize(b); if(!a||!b) return 0;
+  const wa = new Set(a.split(' ').filter(w=>w.length>3));
+  const wb = new Set(b.split(' ').filter(w=>w.length>3));
+  let sh = 0; wa.forEach(w=>{ if(wb.has(w)) sh++; });
+  return sh / Math.max(wa.size, wb.size, 1);
+}
+function findDuplicate(name, rsvp) {
+  const ae = EVENTS;
+  if(rsvp) {
+    const rc = rsvp.replace(/[?#].*$/, '').toLowerCase();
+    const br = ae.find(e => e.rsvp && e.rsvp.replace(/[?#].*$/, '').toLowerCase() === rc);
+    if(br) return br;
+  }
+  let best = null, bs = 0;
+  ae.forEach(e => { const s = similarity(name, e.name); if(s > bs) { bs = s; best = e; } });
+  return bs >= 0.55 ? best : null;
+}
+let dupTimeout;
+function checkDuplicate() {
+  clearTimeout(dupTimeout);
+  dupTimeout = setTimeout(() => {
+    const name = document.getElementById('sub-name').value;
+    const rsvp = document.getElementById('sub-rsvp').value;
+    const dup = findDuplicate(name, rsvp);
+    const w = document.getElementById('duplicateWarning');
+    if(dup && name.length > 4) {
+      document.getElementById('duplicateEventName').textContent = dup.name;
+      w.classList.add('show');
+    } else { w.classList.remove('show'); }
+  }, 400);
+}
+function dayLabelFromISO(iso) {
+  const map = {
+    '2026-06-13':'Sat Jun 13','2026-06-14':'Sun Jun 14','2026-06-15':'Mon Jun 15',
+    '2026-06-16':'Tue Jun 16','2026-06-17':'Wed Jun 17','2026-06-18':'Thu Jun 18',
+    '2026-06-19':'Fri Jun 19','2026-06-20':'Sat Jun 20'
+  };
+  return map[iso] || iso;
+}
+function submitEvent() {
+  const name = document.getElementById('sub-name').value.trim();
+  const date = document.getElementById('sub-date').value;
+  const time = document.getElementById('sub-time').value.trim() || 'TBD';
+  const host = document.getElementById('sub-host').value.trim();
+  const neighborhood = document.getElementById('sub-neighborhood').value.trim() || 'Paris';
+  const venue = document.getElementById('sub-venue').value.trim() || 'TBD';
+  const rsvp = document.getElementById('sub-rsvp').value.trim();
+  const ticket = document.getElementById('sub-ticket').value;
+  const type = document.getElementById('sub-type').value || 'community';
+  const notes = document.getElementById('sub-notes').value.trim();
+  const drinks = document.getElementById('sub-drinks').checked;
+  const food = document.getElementById('sub-food').checked;
+  if(!name) { alert('Please enter an event name.'); return; }
+  if(!date) { alert('Please select a date.'); return; }
+  if(!rsvp) { alert('Please enter an RSVP link.'); return; }
+  const dup = findDuplicate(name, rsvp);
+  if(dup) { if(notes) dup.notes = (dup.notes ? dup.notes + ' · ' : '') + notes; showSuccess('duplicate'); render(); return; }
+  const newEvent = {
+    id: 'sub_' + Date.now(), name, host, date, day: dayLabelFromISO(date),
+    time, venue, neighborhood, address: 'Paris, France',
+    types: [type], ticket, drinks, food, notes, rsvp, status: 'open', submitted: true
+  };
+  EVENTS.push(newEvent);
+  activeDay = 'all';
+  document.querySelectorAll('.day-tab').forEach(t => t.classList.remove('active'));
+  const allTab = document.querySelector('.day-tab[data-date="all"]');
+  if(allTab) allTab.classList.add('active');
+  document.getElementById('dayTabs').innerHTML = '';
+  buildDayTabs();
+  showSuccess('added');
+  render();
+  // Post to sheets — doPost reads flat fields mapped against sheet headers
+  try {
+    const payload = {
+      name: newEvent.name,
+      host: newEvent.host,
+      date: newEvent.date,
+      day: newEvent.day,
+      time: newEvent.time,
+      neighborhood: newEvent.neighborhood,
+      city: newEvent.neighborhood || 'Paris',
+      venue: newEvent.venue,
+      address: newEvent.address || 'Paris, France',
+      types: (newEvent.types || []).join(', '),
+      ticket: newEvent.ticket,
+      free: newEvent.ticket === 'Free' ? 'true' : 'false',
+      drinks: newEvent.drinks ? 'true' : 'false',
+      food: newEvent.food ? 'true' : 'false',
+      rsvp: newEvent.rsvp,
+      notes: newEvent.notes,
+      status: 'open',
+      conference: CONFERENCE,
+      submitted: 'true'
+    };
+    fetch(SCRIPT_URL, {
+      method: 'POST', mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+  } catch(e) {}
+}
+function findEventByRsvp() {
+  const rsvp = document.getElementById('upd-rsvp').value.trim();
+  const label = document.getElementById('upd-found-label');
+  const fields = document.getElementById('upd-fields');
+  if(!rsvp || !rsvp.startsWith('http')) { label.textContent = ''; fields.style.display = 'none'; return; }
+  const rc = rsvp.replace(/[?#].*$/, '').toLowerCase();
+  const found = EVENTS.find(e => e.rsvp && e.rsvp.replace(/[?#].*$/, '').toLowerCase() === rc);
+  if(found) {
+    document.getElementById('upd-event-name').textContent = found.name;
+    fields.style.display = 'block';
+    label.textContent = '';
+  } else {
+    label.textContent = 'Event not found. Check the link and try again.';
+    fields.style.display = 'none';
+  }
+}
+function submitUpdate() {
+  const rsvp = document.getElementById('upd-rsvp').value.trim();
+  const rc = rsvp.replace(/[?#].*$/, '').toLowerCase();
+  const ev = EVENTS.find(e => e.rsvp && e.rsvp.replace(/[?#].*$/, '').toLowerCase() === rc);
+  if(!ev) { alert('Event not found. Please check the RSVP link.'); return; }
+  const newDate = document.getElementById('upd-date').value;
+  const newTime = document.getElementById('upd-time').value.trim();
+  const newVenue = document.getElementById('upd-venue').value.trim();
+  const newHost = document.getElementById('upd-host').value.trim();
+  const newNotes = document.getElementById('upd-notes').value.trim();
+  if(newDate) { ev.date = newDate; ev.day = dayLabelFromISO(newDate); }
+  if(newTime) ev.time = newTime;
+  if(newVenue) ev.venue = newVenue;
+  if(newHost && !ev.host.includes(newHost)) ev.host = ev.host ? ev.host + ' · ' + newHost : newHost;
+  if(newNotes) ev.notes = (ev.notes ? ev.notes + ' · ' : '') + newNotes;
+  showSuccess('updated');
+  render();
+  buildDayTabs();
+}
+
+// ── AI EVENT PARSER ──
+// ── QUICK ADD: parse event URL via Apps Script, fill form ──
+async function importFromLink() {
+  const url = document.getElementById('magic-url').value.trim();
+  if (!url) { alert('Please paste an event URL.'); return; }
+
+  const btn = document.getElementById('magicBtn');
+  const status = document.getElementById('magicStatus');
+  const icon = document.getElementById('magicStatusIcon');
+  const msg = document.getElementById('magicStatusText');
+
+  btn.style.display = 'none';
+  status.style.display = 'block';
+  icon.textContent = '⏳';
+  msg.textContent = 'Fetching event details…';
+
+  try {
+    const res = await fetch(SCRIPT_URL + '?action=parse_event&url=' + encodeURIComponent(url), { cache: 'no-store' });
+    const data = await res.json();
+
+    if (!data.ok || !data.event) throw new Error(data.error || 'No event data returned');
+
+    fillParsedEvent(data.event, url);
+
+    icon.textContent = '✅';
+    msg.textContent = 'Done! Review the details then click Add Event.';
+
+    setTimeout(() => {
+      switchTab('submit');
+      btn.style.display = 'block';
+      status.style.display = 'none';
+      document.getElementById('magic-url').value = '';
+    }, 900);
+
+  } catch(err) {
+    icon.textContent = '⚠️';
+    msg.textContent = 'Could not fetch event. Check the URL and try again, or fill the form manually.';
+    setTimeout(() => {
+      switchTab('submit');
+      btn.style.display = 'block';
+      status.style.display = 'none';
+    }, 2000);
+  }
+}
+
+function fillParsedEvent(ev, url) {
+  const set = (id, val) => { const el = document.getElementById(id); if (el && val != null && val !== '') el.value = val; };
+  const check = (id, val) => { const el = document.getElementById(id); if (el) el.checked = !!val; };
+
+  set('sub-name', ev.name);
+  set('sub-host', ev.host);
+  set('sub-neighborhood', ev.neighborhood || ev.city);
+  set('sub-venue', ev.venue);
+  set('sub-rsvp', url);
+  set('sub-notes', ev.notes);
+
+  // Time — Apps Script returns combined "6:00 PM – 9:00 PM", use start part only for the field
+  if (ev.time) {
+    const startTime = ev.time.split('–')[0].trim().split('—')[0].trim();
+    set('sub-time', startTime !== 'TBD' ? startTime : '');
+  }
+
+  check('sub-drinks', ev.drinks);
+  check('sub-food', ev.food);
+
+  // Date
+  if (ev.date) {
+    const sel = document.getElementById('sub-date');
+    if (sel) {
+      for (let o of sel.options) {
+        if (o.value === ev.date) { sel.value = ev.date; break; }
+      }
+    }
+  }
+
+  // Ticket
+  if (ev.ticket) {
+    const sel = document.getElementById('sub-ticket');
+    if (sel) {
+      const tl = ev.ticket.toLowerCase();
+      if (tl === 'free') sel.value = 'Free';
+      else if (tl.includes('invite')) sel.value = 'Invite Only';
+      else if (tl.includes('application')) sel.value = 'Application Required';
+      else if (tl.includes('approval')) sel.value = 'Free (Approval Required)';
+      else sel.value = 'Paid';
+    }
+  }
+}
+
+// Cat chip selection
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.cat-chip[data-val]').forEach(chip => {
+    chip.addEventListener('click', () => {
+      document.querySelectorAll('.cat-chip[data-val]').forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+      document.getElementById('sub-type').value = chip.dataset.val;
+    });
+  });
+});
 </script>
 </body>
 </html>
