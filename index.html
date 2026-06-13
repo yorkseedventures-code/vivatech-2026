@@ -740,10 +740,7 @@ async function loadEvents() {
   document.getElementById('headerCount').textContent = 'Loading…';
 
   try {
-    const res = await Promise.race([
-      fetch(SCRIPT_URL + '?conference=' + CONFERENCE, {cache:'no-store'}),
-      timeout
-    ]);
+    const res = await fetch(SCRIPT_URL + '?conference=' + CONFERENCE, {cache:'no-store'});
     const data = await res.json();
     if (data.ok && Array.isArray(data.events)) {
         const VALID_DATES = new Set(['2026-06-13','2026-06-14','2026-06-15','2026-06-16','2026-06-17','2026-06-18','2026-06-19','2026-06-20']);
