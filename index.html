@@ -1437,13 +1437,15 @@ async function importFromLink() {
 
     if (!data.ok || !data.event) throw new Error(data.error || 'No event data returned');
 
-    fillParsedEvent(data.event, url);
+    const parsedEvent = data.event;
+    const parsedUrl = url;
 
     icon.textContent = '✅';
     msg.textContent = 'Done! Review the details then click Add Event.';
 
     setTimeout(() => {
       switchTab('submit');
+      fillParsedEvent(parsedEvent, parsedUrl); // fill AFTER tab switch so fields are visible
       btn.style.display = 'block';
       status.style.display = 'none';
       document.getElementById('magic-url').value = '';
