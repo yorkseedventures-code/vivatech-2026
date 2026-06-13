@@ -719,16 +719,20 @@ function render(){
 function buildDayTabs(){
   const tabs=document.getElementById('dayTabs');
   tabs.innerHTML='';
-  const days=[
-    {date:'all',label:'All Days'},
-    {date:'2026-06-13',label:'Sat Jun 13'},
-    {date:'2026-06-14',label:'Sun Jun 14'},
-    {date:'2026-06-16',label:'Tue Jun 16'},
-    {date:'2026-06-17',label:'Wed Jun 17'},
-    {date:'2026-06-18',label:'Thu Jun 18'},
-    {date:'2026-06-19',label:'Fri Jun 19'},
-    {date:'2026-06-20',label:'Sat Jun 20'},
-  ];
+  // Build day tabs dynamically from actual event dates
+  const dateMap = {
+    'all': 'All Days',
+    '2026-06-12': 'Sat Jun 13',
+    '2026-06-13': 'Sun Jun 14',
+    '2026-06-14': 'Mon Jun 15',
+    '2026-06-15': 'Tue Jun 16',
+    '2026-06-16': 'Wed Jun 17',
+    '2026-06-17': 'Thu Jun 18',
+    '2026-06-18': 'Fri Jun 19',
+    '2026-06-19': 'Sat Jun 20',
+  };
+  const seenDates = ['all', ...new Set(allEvents().map(e=>e.date).filter(Boolean).sort())];
+  const days = seenDates.map(d => ({date: d, label: dateMap[d] || d}));
   days.forEach(d=>{
     const count=d.date==='all'?allEvents().length:allEvents().filter(e=>e.date===d.date).length;
     if(count===0&&d.date!=='all') return;
