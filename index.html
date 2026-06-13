@@ -357,16 +357,82 @@ input[type="text"]::placeholder { color: var(--gray-300); }
 .sponsor-slot:hover { border-color:var(--gold);color:var(--gold);background:rgba(201,168,76,0.04); }
 .mobile-fab { display: none; }
 
+/* ── TABLET (iPad) ── */
+@media(max-width:820px){
+  .info-grid-inner { grid-template-columns: repeat(auto-fill, minmax(200px,1fr)); gap: 8px; padding: 16px; }
+  .feature-strip-inner { gap: 10px; }
+  .content { padding: 16px 16px 80px; }
+  .controls { padding: 0 16px; }
+  .stats-bar { padding: 8px 16px; gap: 10px; }
+  .hero { padding: 24px 16px 20px; }
+}
+
+/* ── MOBILE (≤680px) ── */
 @media(max-width:680px){
   .detail-grid { grid-template-columns: 1fr; }
-  .hero-title { font-size: 24px; }
   .submit-btn, .feature-btn { display: none; }
   .stats-bar .submit-btn { display: inline-flex !important; font-size: 10px !important; padding: 4px 10px !important; flex-shrink: 0; }
+
+  /* Header */
+  .header { padding: 8px 14px; }
+  .header-right { gap: 6px; }
+
+  /* Hero */
+  .hero { padding: 20px 14px 16px; }
+  .hero-title { font-size: clamp(22px,6vw,32px); }
+  .hero-meta { gap: 8px; margin-top: 10px; }
+
+  /* Feature strip */
+  .feature-strip { padding: 10px 14px; }
+  .feature-strip-inner { flex-direction: column; align-items: flex-start; gap: 8px; }
+  .feature-strip-inner .feature-btn { width: 100%; justify-content: center; }
+
+  /* Sponsor strip */
+  .sponsor-row { overflow-x: auto; }
+
+  /* Info grid */
+  .info-grid-inner { grid-template-columns: 1fr 1fr; padding: 12px 14px; gap: 8px; }
+
+  /* Controls */
+  .controls { padding: 0 12px; }
+  .search-row { gap: 6px; padding: 10px 0 0; }
+  .filter-chips { gap: 4px; }
+  .filter-chip { font-size: 10.5px; padding: 4px 9px; }
+
+  /* Stats bar */
+  .stats-bar { padding: 6px 12px; flex-wrap: wrap; gap: 6px; }
+  .stat { font-size: 11px; }
+
+  /* Content */
+  .content { padding: 12px 10px 100px; }
+
+  /* Event cards */
+  .event-main { padding: 10px 10px; gap: 8px; }
+  .event-name { font-size: 13px; }
+  .event-host { font-size: 11px; }
+  .event-time-col .day-badge { font-size: 9px; }
+  .event-time-col .time { font-size: 12px; }
+  .event-detail { padding: 10px 10px 12px; }
+  .detail-grid { gap: 10px; }
+
+  /* Modal */
+  .modal { border-radius: 12px 12px 0 0; max-height: 92vh; margin-top: auto; }
+  .modal-overlay { align-items: flex-end; padding: 0; }
+  .modal-header { padding: 14px 16px 12px; }
+  .modal-body { padding: 14px 16px 20px; }
+  .modal-tab { font-size: 10.5px; padding: 8px 6px; }
+  .form-row { grid-template-columns: 1fr; gap: 10px; }
+  .tier-card { padding: 12px; }
 }
+
+/* ── SMALL MOBILE (≤520px) ── */
 @media(max-width:520px){
   .event-right { display: flex; }
   .event-venue-short { display: none; }
-  .mobile-fab { display: flex !important; position: fixed; bottom: 20px; right: 16px; z-index: 500; width: 54px; height: 54px; background: var(--red); color: white; border-radius: 50%; align-items: center; justify-content: center; font-size: 26px; box-shadow: 0 4px 20px rgba(255,10,10,0.5); cursor: pointer; border: none; }
+  .mobile-fab { display: flex !important; position: fixed; bottom: 24px; right: 16px; z-index: 500; width: 52px; height: 52px; background: var(--red); color: white; border-radius: 50%; align-items: center; justify-content: center; font-size: 22px; box-shadow: 0 4px 20px rgba(255,10,10,0.5); cursor: pointer; border: none; font-weight: 700; }
+  .info-grid-inner { grid-template-columns: 1fr; }
+  .hero-tag { font-size: 9.5px; padding: 3px 8px; }
+  .day-tab { padding: 6px 12px 8px; font-size: 11px; }
 }
 
 /* ── MODAL ── */
@@ -1268,10 +1334,11 @@ async function submitEvent() {
     conference: CONFERENCE
   };
 
-  // Show saving state on the button
+  // Show saving state
   const submitBtn = document.querySelector('#form-submit .form-submit');
   if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = 'Saving…'; }
 
+  // POST to sheet
   try {
     await fetch(SCRIPT_URL, {
       method: 'POST',
@@ -1281,24 +1348,33 @@ async function submitEvent() {
     });
   } catch(e) {}
 
-  // Re-fetch from sheet after a short delay to get the written row back
-  // This ensures it's permanent for everyone, not just this session
-  setTimeout(async () => {
+  // Show success immediately — event already in local EVENTS list
+  showSuccess('added');
+  render();
+
+  // Re-fetch from sheet multiple times to ensure the written row comes back
+  // (Apps Script can be slow, especially on first deploy; mobile connections vary)
+  const refetch = async () => {
     await loadEvents();
-    // Make sure the newly added event is visible (loadEvents resets EVENTS)
-    // If for some reason the sheet didn't return it yet, keep our local copy
-    const alreadyInList = EVENTS.find(e => e.rsvp === newEvent.rsvp || e.name === newEvent.name);
-    if (!alreadyInList) EVENTS.push(newEvent);
+    const alreadyInList = EVENTS.find(e =>
+      (e.rsvp && newEvent.rsvp && e.rsvp.replace(/[?#].*/,'') === newEvent.rsvp.replace(/[?#].*/,'')) ||
+      e.name === newEvent.name
+    );
+    if (!alreadyInList) {
+      EVENTS.push(newEvent); // keep local copy if sheet hasn't caught up
+    }
     activeDay = 'all';
     document.querySelectorAll('.day-tab').forEach(t => t.classList.remove('active'));
     const allTab = document.querySelector('.day-tab[data-date="all"]');
     if (allTab) allTab.classList.add('active');
     buildDayTabs();
     render();
-  }, 4500);
+  };
 
-  showSuccess('added');
-  render();
+  // Try at 3s, 6s, and 12s to handle slow connections and Apps Script cold starts
+  setTimeout(refetch, 3000);
+  setTimeout(refetch, 6000);
+  setTimeout(refetch, 12000);
 }
 function findEventByRsvp() {
   const rsvp = document.getElementById('upd-rsvp').value.trim();
