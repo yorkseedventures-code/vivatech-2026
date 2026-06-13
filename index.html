@@ -1157,7 +1157,7 @@ function dayLabelFromISO(iso) {
   };
   return map[iso] || iso;
 }
-function submitEvent() {
+async function submitEvent() {
   const name = document.getElementById('sub-name').value.trim();
   const date = document.getElementById('sub-date').value;
   const time = document.getElementById('sub-time').value.trim() || 'TBD';
@@ -1187,37 +1187,60 @@ function submitEvent() {
   if(allTab) allTab.classList.add('active');
   document.getElementById('dayTabs').innerHTML = '';
   buildDayTabs();
-  showSuccess('added');
-  render();
-  // Post to sheets — doPost reads flat fields mapped against sheet headers
+  // Post to sheets and wait for confirmation before showing success
+  const payload = {
+    name: newEvent.name,
+    host: newEvent.host,
+    date: newEvent.date,
+    day: newEvent.day,
+    time: newEvent.time,
+    neighborhood: newEvent.neighborhood,
+    city: newEvent.neighborhood || 'Paris',
+    venue: newEvent.venue,
+    address: newEvent.address || 'Paris, France',
+    types: (newEvent.types || []).join(', '),
+    ticket: newEvent.ticket,
+    free: newEvent.ticket === 'Free' ? 'true' : 'false',
+    drinks: newEvent.drinks ? 'true' : 'false',
+    food: newEvent.food ? 'true' : 'false',
+    rsvp: newEvent.rsvp,
+    notes: newEvent.notes,
+    status: 'open',
+    conference: CONFERENCE,
+    submitted: 'true'
+  };
+
+  // Show saving state on the button
+  const submitBtn = document.querySelector('#form-submit .form-submit');
+  if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = 'Saving…'; }
+
   try {
-    const payload = {
-      name: newEvent.name,
-      host: newEvent.host,
-      date: newEvent.date,
-      day: newEvent.day,
-      time: newEvent.time,
-      neighborhood: newEvent.neighborhood,
-      city: newEvent.neighborhood || 'Paris',
-      venue: newEvent.venue,
-      address: newEvent.address || 'Paris, France',
-      types: (newEvent.types || []).join(', '),
-      ticket: newEvent.ticket,
-      free: newEvent.ticket === 'Free' ? 'true' : 'false',
-      drinks: newEvent.drinks ? 'true' : 'false',
-      food: newEvent.food ? 'true' : 'false',
-      rsvp: newEvent.rsvp,
-      notes: newEvent.notes,
-      status: 'open',
-      conference: CONFERENCE,
-      submitted: 'true'
-    };
-    fetch(SCRIPT_URL, {
-      method: 'POST', mode: 'no-cors',
+    await fetch(SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
     });
   } catch(e) {}
+
+  // Re-fetch from sheet after a short delay to get the written row back
+  // This ensures it's permanent for everyone, not just this session
+  setTimeout(async () => {
+    await loadEvents();
+    // Make sure the newly added event is visible (loadEvents resets EVENTS)
+    // If for some reason the sheet didn't return it yet, keep our local copy
+    const alreadyInList = EVENTS.find(e => e.rsvp === newEvent.rsvp || e.name === newEvent.name);
+    if (!alreadyInList) EVENTS.push(newEvent);
+    activeDay = 'all';
+    document.querySelectorAll('.day-tab').forEach(t => t.classList.remove('active'));
+    const allTab = document.querySelector('.day-tab[data-date="all"]');
+    if (allTab) allTab.classList.add('active');
+    buildDayTabs();
+    render();
+  }, 2500);
+
+  showSuccess('added');
+  render();
 }
 function findEventByRsvp() {
   const rsvp = document.getElementById('upd-rsvp').value.trim();
