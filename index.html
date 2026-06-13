@@ -1351,6 +1351,9 @@ async function submitEvent() {
     });
   } catch(e) {}
 
+  // Re-enable button
+  if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Add Event to List'; }
+
   // Show success immediately — event already in local EVENTS list
   showSuccess('added');
   render();
@@ -1444,12 +1447,12 @@ async function importFromLink() {
     msg.textContent = 'Done! Review the details then click Add Event.';
 
     setTimeout(() => {
-      switchTab('submit');
-      fillParsedEvent(parsedEvent, parsedUrl); // fill AFTER tab switch so fields are visible
+      fillParsedEvent(parsedEvent, parsedUrl); // fill form fields
+      switchTab('submit'); // switch to details tab so user can review
       btn.style.display = 'block';
       status.style.display = 'none';
       document.getElementById('magic-url').value = '';
-    }, 900);
+    }, 1200);
 
   } catch(err) {
     icon.textContent = '⚠️';
